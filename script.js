@@ -1,6 +1,13 @@
 const themeButton = document.querySelector(".themes__toggle");
 const calculatorButtons = document.querySelectorAll(`[data-type]`);
 const calcResult = document.querySelector(".calc__result");
+const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."];
+const operations = ["+", "-", "*", "/"];
+const availableKeys = [...numbers, ...operations, "Enter", "Backspace", "c"];
+
+let storedNumber = "";
+let currentNumber = "";
+let operation = "";
 
 const toggleTheme = () => {
   themeButton.classList.toggle("themes__toggle--isActive");
@@ -12,10 +19,6 @@ const toggleThemeWithEnter = (event) => {
 themeButton.addEventListener("keydown", (e) => toggleThemeWithEnter(e));
 
 themeButton.addEventListener("click", toggleTheme);
-
-let storedNumber = "";
-let currentNumber = "";
-let operation = "";
 
 const updateUI = (value) => {
   calcResult.innerText = !value ? "0" : value;
@@ -107,3 +110,31 @@ const keysHandler = (button) => {
 };
 
 calculatorButtons.forEach(keysHandler);
+
+// const keyboardWithoutHover = (key) => {
+//   if (numbers.includes(key)) {
+//     numberButtonHandler(key);
+//   } else if (operations.includes(key)) {
+//     operationButtonHandler(key);
+//   } else if (key === "Backspace") {
+//     deleteButtonHandler();
+//   } else if (key === "Enter") {
+//     excuteOperation();
+//   } else if (key === "c") {
+//     resetButtonHandler();
+//   }
+// };
+
+const keyboardWithHover = (key) => {
+  if (availableKeys.includes(key)) {
+    const element = document.querySelector(`[data-value="${key}"]`);
+    element.classList.add("hover");
+    element.click();
+    setTimeout(() => element.classList.remove("hover"), 100);
+  }
+};
+
+window.addEventListener("keydown", (event) => {
+  // keyboardWithoutHover(event.key);
+  keyboardWithHover(event.key);
+});
