@@ -28,10 +28,38 @@ const numberButtonHandler = (value) => {
   updateUI(currentNumber);
 };
 
+const resetButtonHandler = () => {
+  currentNumber = "";
+  storedNumber = "";
+  operation = "";
+  updateUI(currentNumber);
+};
+
+const deleteButtonHandler = () => {
+  if (!currentNumber || currentNumber === "0") return;
+  if (currentNumber.length === 1) {
+    currentNumber = "";
+  } else {
+    currentNumber = currentNumber.substring(0, currentNumber.length - 1);
+  }
+  updateUI(currentNumber);
+};
+
 const keysHandler = (button) => {
   button.addEventListener("click", () => {
-    button.dataset.type === "number" &&
+    const type = button.dataset.type;
+    if (type === "number") {
       numberButtonHandler(button.dataset.value);
+    } else if (type === "operation") {
+      switch (button.dataset.value) {
+        case "c":
+          resetButtonHandler();
+          break;
+        case "Backspace":
+          deleteButtonHandler();
+          break;
+      }
+    }
   });
 };
 
