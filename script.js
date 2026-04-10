@@ -45,6 +45,43 @@ const deleteButtonHandler = () => {
   updateUI(currentNumber);
 };
 
+const excuteOperation = () => {
+  if (currentNumber && storedNumber && operation) {
+    switch (operation) {
+      case "+":
+        storedNumber = parseFloat(storedNumber) + parseFloat(currentNumber);
+        break;
+      case "-":
+        storedNumber = parseFloat(storedNumber) - parseFloat(currentNumber);
+        break;
+      case "*":
+        storedNumber = parseFloat(storedNumber) * parseFloat(currentNumber);
+        break;
+      case "/":
+        if (currentNumber === "0") updateUI("Zero Division Error");
+        else {
+          storedNumber = parseFloat(storedNumber) / parseFloat(currentNumber);
+        }
+        break;
+    }
+    updateUI(storedNumber);
+    currentNumber = "";
+  }
+};
+
+const operationButtonHandler = (operationValue) => {
+  if (!currentNumber && !storedNumber) return;
+  if (currentNumber && !storedNumber) {
+    storedNumber = currentNumber;
+    currentNumber = "";
+    operation = operationValue;
+  } else if (storedNumber) {
+    operation = operationValue;
+
+    if (currentNumber) excuteOperation();
+  }
+};
+
 const keysHandler = (button) => {
   button.addEventListener("click", () => {
     const type = button.dataset.type;
@@ -57,6 +94,12 @@ const keysHandler = (button) => {
           break;
         case "Backspace":
           deleteButtonHandler();
+          break;
+        case "Enter":
+          excuteOperation();
+          break;
+        default:
+          operationButtonHandler(button.dataset.value);
           break;
       }
     }
